@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { checkPayment } from "@/lib/qpay-client";
-import { adminDb } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
 import { createOrder, EsimApiError } from "@/lib/esim-client";
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const adminDb = getAdminDb();
     // Find pending order in Firestore
     const snapshot = await adminDb
       .collection("pending_orders")

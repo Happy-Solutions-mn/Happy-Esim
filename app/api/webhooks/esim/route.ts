@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { adminDb } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 // eSIM Access sends webhooks for events like profile allocation, expiry, etc.
 export async function POST(request: NextRequest) {
@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update matching order in Firestore
+    const adminDb = getAdminDb();
     const query = orderNo
       ? adminDb.collection("orders").where("orderNo", "==", orderNo)
       : adminDb.collection("orders").where("iccid", "==", iccid);
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     if (!snapshot.empty) {
       const batch = adminDb.batch();
-      snapshot.docs.forEach((doc) => {
+      snapshot.docs.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
         batch.update(doc.ref, {
           status: status || event || "updated",
           lastWebhookAt: new Date(),

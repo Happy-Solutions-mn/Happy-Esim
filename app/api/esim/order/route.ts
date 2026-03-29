@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { createOrder, EsimApiError } from "@/lib/esim-client";
-import { adminDb } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request: NextRequest) {
@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Save order to Firestore
+    const adminDb = getAdminDb();
     await adminDb.collection("orders").add({
       orderNo: result.orderNo,
       transactionId,
