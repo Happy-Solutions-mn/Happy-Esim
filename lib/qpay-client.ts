@@ -37,7 +37,7 @@ async function getToken(): Promise<string> {
   });
 
   if (!res.ok) {
-    throw new QPayError(res.status, `QPay auth failed: ${res.statusText}`);
+    throw new QPayError(res.status, `Төлбөрийн холболт түр хугацаанд засвартай байгаа...: ${res.statusText}`);
   }
 
   const data = await res.json();
