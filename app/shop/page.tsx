@@ -192,7 +192,7 @@ export default function ShopPage() {
   const [filtered, setFiltered] = useState([]);
   const [expandedRegions, setExpandedRegions] = useState<Record<string, boolean>>({});
   const [cardHeight, setCardHeight] = useState(0);
-  const card = useRef(null)
+  const card = useRef<HTMLDivElement>(null)
   const grid = useRef(null)
 useEffect(() => {
   const getColumnCount = (gridElement: HTMLElement) => {
@@ -208,8 +208,12 @@ useEffect(() => {
     const column:number = grid.current? getColumnCount(grid.current) : 5;
     const row = Math.ceil(5/column);
     console.log(row);
-    
-    setCardHeight(card.current?.clientHeight  * row + 20 * (row) || 0);
+    if(card.current?.clientHeight){
+
+      setCardHeight(card.current?.clientHeight  * row + 20 * (row) || 0);
+    }else{
+      setCardHeight(0)
+    }
   };
   
   updateHeight();
@@ -351,7 +355,7 @@ useEffect(() => {
                         transition: "max-height 0.3s ease-in-out"
                       }}
                     >
-                      {countries.map((c, index) => (
+                      {countries.map((c:typeof countries[0], index:number) => (
                         <div
                         ref={card}
                           key={c.code}

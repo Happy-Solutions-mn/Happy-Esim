@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
             && x.slug.split("_").length == 3);
 
         favData.forEach((pkg) => {
-            let c = jsonData[pkg.slug.split("_")[0]].prices.find((y) => y.slug == pkg.slug)?.price || 0;
+            let c = jsonData[pkg.slug.split("_")[0] as keyof typeof jsonData].prices.find((y) => y.slug == pkg.slug)?.price || 0;
         pkg.price = c;
         
         })
