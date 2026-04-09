@@ -236,7 +236,7 @@ useEffect(() => {
     setFiltered(
       q
         ? allCountry.filter(
-            (c) =>
+            (c:any) =>
               c.name.toLowerCase().includes(q) ||
               c.code.toLowerCase().includes(q)
           )
@@ -244,7 +244,7 @@ useEffect(() => {
     );
   }, [search]);
 
-  const groupedByRegion = filtered.reduce((acc, country) => {
+  const groupedByRegion = filtered.reduce((acc:any, country:any) => {
     if (!acc[country.region]) {
       acc[country.region] = [];
     }
