@@ -112,7 +112,7 @@ export default function Footer() {
               Дэмжлэг
             </h4>
             {[
-              { href: "mailto:support@happysim.mn", label: "support@happysim.mn" },
+              { href: "mailto:esim@happysolutions.ltd", label: "esim@happysolutions.ltd" },
               { href: "/how-to-use", label: "Тусламж" },
             ].map((l) => (
               <a
@@ -152,10 +152,10 @@ export default function Footer() {
           }}
         >
           <p style={{ color: "var(--text-muted)", fontSize: 13 }}>
-            © {new Date().getFullYear()} HappySim. Бүх эрх хуулиар хамгаалагдсан.
+            © {new Date().getFullYear()} HappySolutions. Бүх эрх хуулиар хамгаалагдсан.
           </p>
           <p style={{ color: "var(--text-muted)", fontSize: 13 }}>
-            Powered by Happy-Esim
+            Powered by HappySolutions 
           </p>
         </div>
       </div>

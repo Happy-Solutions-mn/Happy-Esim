@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import globe from "../assets/globe.png"
+
 
 interface CountryCardProps {
   code: string;
@@ -9,7 +11,9 @@ interface CountryCardProps {
   flag: string; // emoji fallback
   fromPrice: number;
   packageCount?: number;
+  supportedRegeon:string[]
 }
+
 
 export default function CountryCard({
   code,
@@ -17,9 +21,11 @@ export default function CountryCard({
   flag,
   fromPrice,
   packageCount,
+  supportedRegeon
 }: CountryCardProps) {
   const [imgError, setImgError] = useState(false);
-  const flagUrl = `https://flagcdn.com/${code.toLowerCase()}.svg`;
+  const sup = supportedRegeon[0].split(",")
+  const [flagURL, setFlag] = useState(sup.length>1?globe: `https://flagcdn.com/${code.toLowerCase()}.svg`)
 
   return (
     <Link href={`/shop/${code.toLowerCase()}`} style={{ textDecoration: "none" }}>
@@ -46,11 +52,11 @@ export default function CountryCard({
         {/* Flag as full background */}
         {!imgError ? (
           <Image
-            src={flagUrl}
+            src={flagURL}
             alt={`${name} далбаа`}
             fill
             style={{ objectFit: "cover" }}
-            onError={() => setImgError(true)}
+            // onError={() => setImgError(true)}
             sizes="(max-width: 768px) 50vw, 200px"
           />
         ) : (
@@ -111,7 +117,7 @@ export default function CountryCard({
               >
                 {name}
               </p>
-              <p
+              {/* <p
                 style={{
                   fontSize: 12,
                   color: "rgba(255,255,255,0.8)",
@@ -120,7 +126,7 @@ export default function CountryCard({
                 }}
               >
                 ₮{fromPrice.toLocaleString()}~
-              </p>
+              </p> */}
             </div>
 
             {/* Arrow button */}

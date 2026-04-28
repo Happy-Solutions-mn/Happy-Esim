@@ -3,18 +3,18 @@ import HowToUseSteps from "@/components/HowToUseSteps";
 import CountryCard from "@/components/CountryCard";
 
 const POPULAR_COUNTRIES = [
-  { code: "JP", name: "Япон", flag: "🇯🇵", fromPrice: 9900 },
-  { code: "KR", name: "Солонгос", flag: "🇰🇷", fromPrice: 8900 },
-  { code: "TH", name: "Тайланд", flag: "🇹🇭", fromPrice: 7500 },
-  { code: "SG", name: "Сингапур", flag: "🇸🇬", fromPrice: 10900 },
-  { code: "US", name: "АНУ", flag: "🇺🇸", fromPrice: 14900 },
-  { code: "CN", name: "Хятад", flag: "🇨🇳", fromPrice: 8900 },
-  { code: "TR", name: "Турк", flag: "🇹🇷", fromPrice: 6900 },
-  { code: "DE", name: "Герман", flag: "🇩🇪", fromPrice: 12900 },
-  { code: "GB", name: "Их Британи", flag: "🇬🇧", fromPrice: 13900 },
-  { code: "AU", name: "Австрали", flag: "🇦🇺", fromPrice: 11900 },
-  { code: "MY", name: "Малайз", flag: "🇲🇾", fromPrice: 6500 },
-  { code: "VN", name: "Вьетнам", flag: "🇻🇳", fromPrice: 6900 },
+  {supportedRegeon:[""], code: "JP", name: "Япон", flag: "🇯🇵", fromPrice: 9900 },
+  {supportedRegeon:[""], code: "KR", name: "Солонгос", flag: "🇰🇷", fromPrice: 8900 },
+  {supportedRegeon:[""], code: "TH", name: "Тайланд", flag: "🇹🇭", fromPrice: 7500 },
+  {supportedRegeon:[""], code: "SG", name: "Сингапур", flag: "🇸🇬", fromPrice: 10900 },
+  {supportedRegeon:[""], code: "US", name: "АНУ", flag: "🇺🇸", fromPrice: 14900 },
+  {supportedRegeon:[""], code: "CN", name: "Хятад", flag: "🇨🇳", fromPrice: 8900 },
+  {supportedRegeon:[""], code: "TR", name: "Турк", flag: "🇹🇷", fromPrice: 6900 },
+  {supportedRegeon:[""], code: "DE", name: "Герман", flag: "🇩🇪", fromPrice: 12900 },
+  {supportedRegeon:[""], code: "GB", name: "Их Британи", flag: "🇬🇧", fromPrice: 13900 },
+  {supportedRegeon:[""], code: "AU", name: "Австрали", flag: "🇦🇺", fromPrice: 11900 },
+  {supportedRegeon:[""], code: "MY", name: "Малайз", flag: "🇲🇾", fromPrice: 6500 },
+  {supportedRegeon:[""], code: "VN", name: "Вьетнам", flag: "🇻🇳", fromPrice: 6900 },
 ];
 
 const FEATURES = [

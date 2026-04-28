@@ -1,50 +1,39 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import PackageCard from "@/components/PackageCard";
 import type { EsimPackage } from "@/lib/esim-client";
-
-const COUNTRY_META: Record<string, { name: string; flag: string; image: string; fallbackImage?: string }> = {
-  jp: { name: "Япон", flag: "🇯🇵", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=1200" },
-  kr: { name: "Солонгос", flag: "🇰🇷", image: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&q=80&w=1200" },
-  th: { name: "Тайланд", flag: "🇹🇭", image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&q=80&w=1200" },
-  sg: { name: "Сингапур", flag: "🇸🇬", image: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&q=80&w=1200" },
-  us: { name: "АНУ", flag: "🇺🇸", image: "https://images.unsplash.com/photo-1480714378408-67cf0d13f9cb?auto=format&fit=crop&q=80&w=1200" },
-  cn: { name: "Хятад", flag: "🇨🇳", image: "https://images.unsplash.com/photo-1508804185872-d7bad8001acd?auto=format&fit=crop&q=80&w=1200" },
-  tr: { name: "Турк", flag: "🇹🇷", image: "https://images.unsplash.com/photo-1524231757912-21f4fe3a088f?auto=format&fit=crop&q=80&w=1200" },
-  de: { name: "Герман", flag: "🇩🇪", image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&q=80&w=1200" },
-  gb: { name: "Их Британи", flag: "🇬🇧", image: "https://images.unsplash.com/photo-1513635269975-59693e0ce1b1?auto=format&fit=crop&q=80&w=1200" },
-  au: { name: "Австрали", flag: "🇦🇺", image: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&q=80&w=1200" },
-  my: { name: "Малайз", flag: "🇲🇾", image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&q=80&w=1200" },
-  vn: { name: "Вьетнам", flag: "🇻🇳", image: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&q=80&w=1200" },
-  fr: { name: "Франц", flag: "🇫🇷", image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&q=80&w=1200" },
-  it: { name: "Итали", flag: "🇮🇹", image: "https://images.unsplash.com/photo-1498503182468-3b51cbb3cbcd?auto=format&fit=crop&q=80&w=1200" },
-  es: { name: "Испани", flag: "🇪🇸", image: "https://images.unsplash.com/photo-1543783207-1166ed58c339?auto=format&fit=crop&q=80&w=1200" },
-  id: { name: "Индонез", flag: "🇮🇩", image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?auto=format&fit=crop&q=80&w=1200" },
-  in: { name: "Энэтхэг", flag: "🇮🇳", image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&q=80&w=1200" },
-  ph: { name: "Филиппин", flag: "🇵🇭", image: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&q=80&w=1200" },
-  hk: { name: "Хонг Конг", flag: "🇭🇰", image: "https://images.unsplash.com/photo-1516893676001-52fdf7605797?auto=format&fit=crop&q=80&w=1200" },
-  tw: { name: "Тайвань", flag: "🇹🇼", image: "https://images.unsplash.com/photo-1552993873-0402ae1f501e?auto=format&fit=crop&q=80&w=1200" },
-  sa: { name: "Саудын Араб", flag: "🇸🇦", image: "https://images.unsplash.com/photo-1580614131599-2e0081e6490e?auto=format&fit=crop&q=80&w=1200" },
-  ae: { name: "АНЭУ", flag: "🇦🇪", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&q=80&w=1200" },
-};
-
-const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1500835556837-99ac94a94552?auto=format&fit=crop&q=80&w=1200";
-
+import countryData from "../../../data/countries.json"
+import globe from "../../../assets/globe.png"
 interface PageProps {
   params: Promise<{ country: string }>;
 }
+import countryJson from "../../../data/countries.json"
 
+const countryName = {}
+
+function GetName(code){
+  if(countryName[code]){
+    return countryName[code]
+  }
+  countryName[code] = countryJson.find((i) => {
+    return i.code == code.toUpperCase()
+  })?.name || code
+  return countryName[code]
+}
 export default function CountryPackagesPage({ params }: PageProps) {
+
+  console.log("hihi");
+  
   const router = useRouter();
   const [country, setCountry] = useState("");
-  const [packages, setPackages] = useState<EsimPackage[]>([]);
+  const [packages, setPackages] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selected, setSelected] = useState<EsimPackage | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const [duration, setDuration] = useState([])
+const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     params.then(({ country: c }) => {
@@ -61,26 +50,25 @@ export default function CountryPackagesPage({ params }: PageProps) {
   }, []);
 
   useEffect(() => {
+    console.log(country);
+    
     if (!country) return;
     setLoading(true);
     setError("");
     fetch(`/api/esim/packages?locationCode=${country.toUpperCase()}&type=BASE`)
       .then((r) => r.json())
       .then((data) => {
-        if (data.success) {
-          console.log(data.data);
-          
-          setPackages(data.data?.packageList || []);
-        } else {
-          setError(data.message || "Алдаа гарлаа");
+        if(data.error){
+          setError("Мэдээлэл олдсонгүй")
+          return
         }
+        setPackages(data)
       })
       .catch(() => setError("Сервертэй холбогдоход алдаа гарлаа"))
       .finally(() => setLoading(false));
   }, [country]);
-
-  const meta = COUNTRY_META[country] || { name: country.toUpperCase(), flag: "🌐", image: DEFAULT_IMAGE };
-
+  const meta = countryData.find((x) => x.code == country.toUpperCase()) || {name:"",region:"",code:""}
+  
   const handleCheckout = () => {
     if (!selected) return;
     const params = new URLSearchParams({
@@ -97,8 +85,8 @@ export default function CountryPackagesPage({ params }: PageProps) {
   };
 
   // Group packages by duration
-  const groupedPackages = packages.reduce((acc, pkg) => {
-    const key = pkg.duration;
+  const groupedPackages = packages==null?[]: packages?.prices.reduce((acc, pkg) => {
+    const key = pkg.time;
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -146,7 +134,7 @@ export default function CountryPackagesPage({ params }: PageProps) {
       <div style={{
         position: 'relative',
         height: '45vh',
-        minHeight: '380px',
+        minHeight: '300px',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -158,18 +146,9 @@ export default function CountryPackagesPage({ params }: PageProps) {
           inset: 0,
           zIndex: 0,
         }}>
-          {country && (
-            <Image
-              src={meta.image}
-              alt={meta.name}
-              fill
-              priority
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-          )}
+         
         </div>
 
-        {/* Gradient Overlay for seamless transition */}
         <div style={{
           position: 'absolute',
           inset: 0,
@@ -195,7 +174,7 @@ export default function CountryPackagesPage({ params }: PageProps) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {country && (
                 <img
-                  src={`https://flagcdn.com/w80/${country}.png`}
+                  src={ country.split("-").length>1?globe.src: `https://flagcdn.com/${country.toLowerCase()}.svg`}
                   alt={`${meta.name} далбаа`}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   onError={(e) => {
@@ -230,12 +209,166 @@ export default function CountryPackagesPage({ params }: PageProps) {
                 fontWeight: 500,
                 boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
               }}>
-                {loading ? "Ачаалж байна..." : `${packages.length} багц боломжтой`}
+                {(loading || error) ? "Ачаалж байна..." : `${packages?.prices.length} багц боломжтой`}
               </div>
             </div>
           </div>
         </div>
       </div>
+            {
+   (country.split("-").length > 1 && packages?.supportedRegeon?.length > 0) ? (
+    <div className="container" style={{ marginTop: "24px", position: "relative", zIndex: 10 }} onClick={() => setIsExpanded(!isExpanded)}>
+      <div
+        style={{
+          background: "rgba(255,255,255,0.05)",
+          backdropFilter: "blur(8px)",
+          borderRadius: 20,
+          padding: "20px 24px",
+          border: "1px solid rgba(255,255,255,0.1)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            marginBottom: isExpanded ? "16px" : "0",
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+          
+        >
+          <span style={{ fontSize: 20 }}>🌍</span>
+          <h3
+            style={{
+              fontSize: 18,
+              fontWeight: 600,
+              color: "#f3f4f6",
+              margin: 0,
+            }}
+          >
+            Ашиглах боломжтой орнууд
+          </h3>
+          <span
+            style={{
+              padding: "2px 10px",
+              background: "rgba(255,255,255,0.15)",
+              borderRadius: 100,
+              fontSize: 12,
+              color: "#9ca3af",
+            }}
+          >
+            {packages.supportedRegeon[0].split(",").length} орнууд
+          </span>
+          
+          {/* 展开/收起图标 */}
+          <span
+            style={{
+              marginLeft: "auto",
+              fontSize: 14,
+              color: "#9ca3af",
+              transition: "transform 0.2s ease",
+              transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+            }}
+          >
+            ▼
+          </span>
+        </div>
+
+        {/* 可展开/收起的内容 */}
+        <div
+          style={{
+            display: isExpanded ? "flex" : "none",
+            flexWrap: "wrap",
+            gap: "10px",
+            marginTop: "16px",
+            transition: "all 0.3s ease",
+          }}
+        >
+          {console.log(packages.supportedRegeon)}
+          {packages.supportedRegeon[0].split(",").map((countryCode) => (
+            <div
+              key={countryCode}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "6px 14px",
+                background: "rgba(255,255,255,0.1)",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#e5e7eb",
+                border: "1px solid rgba(255,255,255,0.1)",
+                transition: "all 0.2s ease",
+                cursor: "default",
+              }}
+            >
+              <img
+                src={`https://flagcdn.com/w20/${countryCode.toLowerCase()}.webp`}
+                alt={countryCode}
+                style={{
+                  width: 20,
+                  height: 15,
+                  objectFit: "cover",
+                  borderRadius: 2,
+                }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = "none";
+                }}
+              />
+              <span>{GetName(countryCode.toUpperCase())}</span>
+            </div>
+          ))}
+        </div>
+        
+        {/* 收起时显示的前3个国家预览 */}
+        {!isExpanded && packages.supportedRegeon[0].split(",").length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              // gap: "8px",
+              marginTop: "12px",
+              opacity: 0.7,
+            }}
+          >
+            {packages.supportedRegeon[0].split(",").slice(0, 3).map((countryCode) => (
+              <div
+                key={`preview-${countryCode}`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  // gap: "6px",
+                  padding: "4px 10px",
+                  background: "rgba(255,255,255,0.05)",
+                  borderRadius: 100,
+                  fontSize: 11,
+                  color: "#9ca3af",
+                }}
+              >
+                
+                <span>{GetName(countryCode.toUpperCase())}</span>
+              </div>
+            ))}
+            {packages.supportedRegeon[0].split(",").length > 3 && (
+              <span
+                style={{
+                  padding: "4px 10px",
+                  fontSize: 11,
+                  color: "#6b7280",
+                }}
+              >
+                +{packages.supportedRegeon[0].split(",").length - 3}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  ) : null
+}
+      
 
       <div className="container" style={{ marginTop: "24px", position: "relative", zIndex: 10 }}>
         {/* Error */}
@@ -284,8 +417,7 @@ export default function CountryPackagesPage({ params }: PageProps) {
           <>
             {sortedDurationKeys.map((duration, index) => {
               const durationPackages = groupedPackages[duration];
-              const firstPackage = durationPackages[0];
-              const durationUnit = firstPackage?.durationUnit || '';
+              const durationUnit = "өдрийн багц";
               
               return (
                 <div key={duration} style={{ marginBottom: "40px" }}>
@@ -311,7 +443,7 @@ export default function CountryPackagesPage({ params }: PageProps) {
                   >
                     {durationPackages.map((pkg, i) => (
                       <div 
-                        key={pkg.packageCode} 
+                        key={i} 
                         style={{ 
                           animation: `fade-in-up 0.5s ease forwards ${(index * 0.1) + (i * 0.05)}s`,
                           opacity: 0,
@@ -319,10 +451,15 @@ export default function CountryPackagesPage({ params }: PageProps) {
                         }}
                       >
                         <PackageCard
-                          ipExport={""} {...pkg}
-                          selected={selected?.packageCode === pkg.packageCode}
+                          name={pkg.name}
+                          volume={pkg.volume}
+                          duration={pkg.time}
+                          durationUnit={"DAY"}
+                          price={pkg.price}
+                          speed={packages.speed}
+                          selected={selected?.slug === pkg.slug}
                           onSelect={() => setSelected(
-                            selected?.packageCode === pkg.packageCode ? null : pkg
+                            selected?.slug === pkg.slug ? null : pkg
                           )}
                         />
                       </div>
@@ -332,7 +469,7 @@ export default function CountryPackagesPage({ params }: PageProps) {
               );
             })}
 
-            {packages.length === 0 && !error && (
+            {!packages && !error && (
               <div style={{ textAlign: "center", padding: "100px 0", color: "var(--text-muted)", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <div style={{ fontSize: 64, marginBottom: 24, opacity: 0.5, filter: "grayscale(1)" }}>🌍</div>
                 <h3 style={{ fontSize: 20, fontWeight: 600, color: "var(--text)", marginBottom: 8 }}>Багц олдсонгүй</h3>

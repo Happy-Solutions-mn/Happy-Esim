@@ -1,15 +1,12 @@
 interface PackageCardProps {
-  packageCode: string;
   name: string;
   volume: number; // bytes
   duration: number;
   durationUnit: string;
   price: number;
-  currencyCode: string;
   speed?: string;
   onSelect?: () => void;
   selected?: boolean;
-  ipExport:string
 }
 
 function formatBytes(bytes: number): string {
@@ -20,28 +17,22 @@ function formatBytes(bytes: number): string {
 
 function formatDuration(duration: number, unit: string): string {
   const u = unit?.toUpperCase();
+  
   if (u === "DAY") return duration === 1 ? "1 өдөр" : `${duration} өдөр`;
   if (u === "MONTH") return `${duration} сар`;
   return `${duration} ${unit}`;
 }
 
-// Convert USD cents to MNT approximately (1 USD ~ 3450 MNT)
-function toMnt(cents: number): number {
-  return Math.round((cents / 10000) * 3450);
-}
 
 export default function PackageCard({
-  packageCode,
   name,
   volume,
   duration,
   durationUnit,
   price,
-  currencyCode,
   speed,
   onSelect,
   selected,
-  ipExport
 }: PackageCardProps) {
   const displayPrice =price
     // currencyCode === "USD" ? toMnt(price) : price;
@@ -94,7 +85,7 @@ export default function PackageCard({
         <div>
           <p
             style={{
-              fontSize: 26,
+              fontSize: 25,
               fontWeight: 800,
               color: "var(--text)",
               lineHeight: 1,
@@ -113,7 +104,7 @@ export default function PackageCard({
               onSelect();
             }}
             className="btn-primary"
-            style={{ padding: "10px 18px", fontSize: 14, whiteSpace: "nowrap" }}
+            style={{ padding: "10px 16px", fontSize: 13, whiteSpace: "nowrap" }}
           >
             {selected ? "✓ Сонгогдсон" : "Авах"}
           </button>

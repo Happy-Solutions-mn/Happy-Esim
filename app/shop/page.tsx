@@ -4,7 +4,7 @@ import CountryCard from "@/components/CountryCard";
 
 
 
-const REGION_ORDER = ["Ази", "Европ", "Хойд Америк", "Өмнөд Америк", "Австрали", "Дундад зүүн", "Монгол"];
+const REGION_ORDER = ["Ази", "Европ", "Хойд Америк", "Өмнөд Америк", "Австрали", "Дундад зүүн"];
 
 export default function ShopPage() {
   const [search, setSearch] = useState("");
@@ -16,9 +16,8 @@ export default function ShopPage() {
 
 useEffect(() => {
   fetch("/api/esim/list").then((res) => {
-
+    
     res.json().then((r) => {
-      console.log(r);
       setAllCountry(r);
       setFiltered(r);
     })
@@ -107,6 +106,7 @@ useEffect(() => {
           <div>
             {sortedRegions.map((region) => {
               const countries = groupedByRegion[region];
+              
               const isExpanded = expandedRegions[region] || false;
               const hasMore = countries.length > 5;
               
@@ -144,6 +144,7 @@ useEffect(() => {
                     >
                       {countries.map((c:typeof countries[0], index:number) => {
                         if (!isExpanded && index >= 5) return null;
+                        
 
                         return <div
                           key={c.code}

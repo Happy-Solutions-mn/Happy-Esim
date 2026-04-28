@@ -1,17 +1,11 @@
 import { NextRequest } from "next/server";
-import {countryData} from "../../countryData";
+import { jsonData } from "../../countryData";
 export async function GET(request: NextRequest) {
-    const data = countryData;
-    const jsonData:any[] = []
-    data.map((item) => {
-    const a = {...item
-        ,fromPrice:item.prices.sort((a, b) => a.price - b.price)[0].price
-    };
-        // item.fromPrice = item.prices.sort((a, b) => a.price - b.price)[0].price;
-        a.name = item.countryName;
-        jsonData.push(a);
-    })
-    
+    const data = jsonData;
 
-    return Response.json(jsonData);
+    return Response.json(
+        Object.values(data).sort((a, b) => {
+            return b.prices.length - a.prices.length;
+        })
+    );
 }
