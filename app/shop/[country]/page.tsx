@@ -71,17 +71,9 @@ const [isExpanded, setIsExpanded] = useState(false);
   
   const handleCheckout = () => {
     if (!selected) return;
-    const params = new URLSearchParams({
-      packageCode: selected.packageCode,
-      slug: selected.slug || "",
-      name: selected.name,
-      price: selected.price.toString(),
-      currency: selected.currencyCode,
-      volume: selected.volume.toString(),
-      duration: selected.duration.toString(),
-      durationUnit: selected.durationUnit,
-    });
-    router.push(`/checkout?${params.toString()}`);
+    console.log(selected);
+    
+    router.push(`/checkout?id=${selected.slug}`);
   };
 
   // Group packages by duration

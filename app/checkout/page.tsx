@@ -19,16 +19,10 @@ function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const packageCode = searchParams.get("packageCode") || "";
-  const slug = searchParams.get("slug") || "";
-  const name = searchParams.get("name") || "";
-  const price = Number(searchParams.get("price") || "0");
-  const currency = searchParams.get("currency") || "USD";
-  const volume = Number(searchParams.get("volume") || "0");
-  const duration = Number(searchParams.get("duration") || "0");
-  const durationUnit = searchParams.get("durationUnit") || "DAY";
+  const id = searchParams.get("id") || "";
 
-  const mntPrice =  price;
+  const [data, setData] = useState();
+
 
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<"form" | "payment" | "done">("form");
@@ -37,6 +31,18 @@ function CheckoutContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [polling, setPolling] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/esim/current?id="+id).then((res) => {
+      res.json().then((d) => {
+        if(d.error){
+          setError("no data found")
+        }else{
+          setData(d)
+        }
+      })
+    })
+  }, [])
 
   const handleCreateInvoice = async () => {
     if (!email || !email.includes("@")) {
@@ -56,7 +62,7 @@ function CheckoutContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           orderId: oid,
-          amount: mntPrice,
+          amount: data&&data.price,
           description: `HappySim: ${name}`,
         }),
       });
@@ -105,7 +111,7 @@ function CheckoutContent() {
     }, 5000);
   };
 
-  if (!packageCode && !slug) {
+  if (!data && error) {
     return (
       <div style={{ paddingTop: "120px", textAlign: "center", color: "var(--text-muted)" }}>
         <p>Багц олдсонгүй. Дэлгүүр рүү буцна уу.</p>
@@ -160,19 +166,17 @@ function CheckoutContent() {
           </h3>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
             <span style={{ color: "var(--text-muted)", fontSize: 14 }}>Багц</span>
-            <span style={{ fontWeight: 600, fontSize: 14, maxWidth: "60%", textAlign: "right" }}>{name}</span>
+            <span style={{ fontWeight: 600, fontSize: 14, maxWidth: "60%", textAlign: "right" }}>{data&&data.name}</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
             <span style={{ color: "var(--text-muted)", fontSize: 14 }}>Дата</span>
             <span style={{ fontWeight: 600, fontSize: 14 }}>
-              {volume >= 1073741824
-                ? `${(volume / 1073741824).toFixed(0)} GB`
-                : `${(volume / 1048576).toFixed(0)} MB`}
+              {data&&(data.volume / 1073741824).toFixed(0)} GB
             </span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
             <span style={{ color: "var(--text-muted)", fontSize: 14 }}>Хугацаа</span>
-            <span style={{ fontWeight: 600, fontSize: 14 }}>{duration} {durationUnit === "DAY" ? "өдөр" : "сар"}</span>
+            <span style={{ fontWeight: 600, fontSize: 14 }}>{data&&data.time}</span>
           </div>
           <div
             style={{
@@ -184,7 +188,7 @@ function CheckoutContent() {
           >
             <span style={{ fontWeight: 700 }}>Нийт дүн</span>
             <span style={{ fontWeight: 900, fontSize: 22, color: "var(--accent-hover)" }}>
-              ₮{mntPrice.toLocaleString()}
+              ₮{data&&data.price}
             </span>
           </div>
         </div>
