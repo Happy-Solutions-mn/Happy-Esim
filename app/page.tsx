@@ -1,4 +1,5 @@
-import Link from "next/link";
+// import Link from "next/link";
+import Link from "@/components/Link"
 import HowToUseSteps from "@/components/HowToUseSteps";
 import CountryCard from "@/components/CountryCard";
 

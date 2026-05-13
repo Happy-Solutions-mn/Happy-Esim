@@ -1,7 +1,10 @@
 "use client";
-import Link from "next/link";
+// import Link from "next/link";
+import Link from "@/components/Link"
 import ThemeToggle from "./ThemeToggle";
 import { useState, useEffect } from "react";
+import logo from "@/assets/logo.png"
+import Image from "next/image";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(true);
@@ -61,7 +64,7 @@ export default function Navbar() {
             style={{
               width: 36,
               height: 36,
-              background: "linear-gradient(135deg, #6366f1, #a78bfa)",
+              // background: "linear-gradient(135deg, #6366f1, #a78bfa)",
               borderRadius: 10,
               display: "flex",
               alignItems: "center",
@@ -69,7 +72,7 @@ export default function Navbar() {
               fontSize: 18,
             }}
           >
-            📡
+            <Image alt="logo" src={logo} width={40} height={40} />
           </div>
           <span
             style={{

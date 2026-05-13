@@ -1,5 +1,8 @@
 "use client";
-import Link from "next/link";
+// import Link from "next/link";
+import Link from "@/components/Link"
+import logo from "@/assets/logo.png"
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -29,7 +32,7 @@ export default function Footer() {
                 marginBottom: "16px",
               }}
             >
-              <span style={{ fontSize: 24 }}>📡</span>
+              <Image alt="logo" src={logo} width={40} height={40} />
               <span
                 style={{
                   fontWeight: 800,

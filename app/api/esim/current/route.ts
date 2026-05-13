@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { jsonData } from "../../countryData";
+import { DataResponse } from "../../utils/Res";
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
@@ -7,7 +8,7 @@ export async function GET(request: NextRequest) {
     const counrty = slug.split("_")[0];
     const countryData = jsonData[counrty];
     if (!countryData) {
-        return new Response(JSON.stringify({ error: "No data found" }));
+        return DataResponse({ error: "No data found" }, 400);
     }
     let data = null;
     countryData.prices.map((i) => {
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest) {
         }
     });
     if (data) {
-        return new Response(JSON.stringify(data));
+        return DataResponse(data);
     }
-    return new Response(JSON.stringify({ error: "No data found" }));
+    return DataResponse({ error: "No data found" }, 400);
 }
