@@ -3,7 +3,7 @@ import { checkPayment } from "@/lib/qpay-client";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { createOrder, EsimApiError } from "@/lib/esim-client";
 import { v4 as uuidv4 } from "uuid";
-
+export const runtime = 'edge';
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const orderId = searchParams.get("orderId");

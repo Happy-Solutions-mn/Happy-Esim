@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { createInvoice, QPayError } from "@/lib/qpay-client";
-
+export const runtime = 'edge';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

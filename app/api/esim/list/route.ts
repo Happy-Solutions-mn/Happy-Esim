@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { jsonData } from "../../countryData";
 import { DataResponse } from "../../utils/Res";
+export const runtime = 'edge';
 export async function GET(request: NextRequest) {
     const data = jsonData;
 

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-
+export const runtime = 'edge';
 // eSIM Access sends webhooks for events like profile allocation, expiry, etc.
 export async function POST(request: NextRequest) {
   try {
