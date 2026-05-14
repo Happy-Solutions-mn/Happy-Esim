@@ -1,3 +1,4 @@
+export const runtime = 'nodejs';  
 import { NextRequest } from "next/server";
 import { createInvoice, QPayError } from "@/lib/qpay-client";
 import { jsonData } from "../../countryData";

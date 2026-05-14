@@ -1,0 +1,8 @@
+
+> happysim@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.ts options detected: 
+ ⚠     Unrecognized key(s) in object: 'openNextExperimentalFeatures' at "experimental"
+ ⚠     Unrecognized key(s) in object: 'cacheComponents', 'serverComponentsExternalPackages'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
