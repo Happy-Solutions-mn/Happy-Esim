@@ -3,10 +3,6 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 
-// Convert USD cents to MNT
-function toMnt(cents: number): number {
-  return Math.round((cents / 10000) * 3450);
-}
 
 interface QPayInvoice {
   invoice_id: string;
@@ -39,12 +35,17 @@ function CheckoutContent() {
           setError("no data found")
         }else{
           setData(d)
+          console.log(d);
+          
         }
       })
     })
   }, [])
 
   const handleCreateInvoice = async () => {
+    if(loading){
+      return
+    }
     if (!email || !email.includes("@")) {
       setError("Зөв и-мэйл хаяг оруулна уу");
       return;
@@ -53,17 +54,15 @@ function CheckoutContent() {
     setError("");
 
     try {
-      const oid = `HS-${Date.now()}`;
+      const oid = `HS-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
       setOrderId(oid);
 
-      // Save pending order in Firestore via a lightweight approach
       const invoiceRes = await fetch("/api/payment/qpay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           orderId: oid,
-          amount: data&&data.price,
-          description: `HappySim: ${name}`,
+          slug:id,
         }),
       });
 

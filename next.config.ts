@@ -1,3 +1,4 @@
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -15,10 +16,13 @@ const nextConfig: NextConfig = {
         ],
     },
     eslint: {
-        ignoreDuringBuilds: true, 
+        ignoreDuringBuilds: true,
     },
     typescript: {
-        ignoreBuildErrors: true, 
+        ignoreBuildErrors: true,
+    },
+    experimental: {
+        openNextExperimentalFeatures: true,
     },
 };
 
