@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 const BASE_URL = process.env.ESIMACCESS_API_URL || "https://api.esimaccess.com";
 const ACCESS_CODE = process.env.ESIMACCESS_ACCESS_CODE || "";
