@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { queryEsim, EsimApiError } from "@/lib/esim-client";
 import { DataResponse } from "../../utils/Res";
-
+export const runtime = 'edge';
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const orderNo = searchParams.get("orderNo") || undefined;

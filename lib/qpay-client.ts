@@ -91,7 +91,7 @@ export async function refreshToken(refreshToken: string): Promise<string> {
     }
 
     const data = await res.json();
-    cachedToken = {
+    const cachedToken = {
         token: data.access_token,
         expiresAt: Date.now() + (data.expires_in || 3600) * 1000 - 60000,
     };

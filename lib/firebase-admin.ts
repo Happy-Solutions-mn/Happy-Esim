@@ -1,27 +1,27 @@
-import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getFirestore, Firestore } from "firebase-admin/firestore";
+// import { initializeApp, getApps, cert } from "firebase-admin/app";
+// import { getFirestore, Firestore } from "firebase-admin/firestore";
 
-let _db: Firestore | null = null;
+// let _db: Firestore | null = null;
 
-/**
- * Lazily initializes Firebase Admin and returns Firestore.
- * Must only be called inside request handlers (never at module scope),
- * so that missing env vars during `next build` don't crash the build.
- */
-export function getAdminDb(): Firestore {
-  if (_db) return _db;
+// /**
+//  * Lazily initializes Firebase Admin and returns Firestore.
+//  * Must only be called inside request handlers (never at module scope),
+//  * so that missing env vars during `next build` don't crash the build.
+//  */
+// export function getAdminDb(): Firestore {
+//   if (_db) return _db;
 
-  const app =
-    getApps().length > 0
-      ? getApps()[0]
-      : initializeApp({
-          credential: cert({
-            projectId: process.env.FIREBASE_PROJECT_ID,
-            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-          }),
-        });
+//   const app =
+//     getApps().length > 0
+//       ? getApps()[0]
+//       : initializeApp({
+//           credential: cert({
+//             projectId: process.env.FIREBASE_PROJECT_ID,
+//             clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+//             privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+//           }),
+//         });
 
-  _db = getFirestore(app);
-  return _db;
-}
+//   _db = getFirestore(app);
+//   return _db;
+// }
