@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const { orderId, slug } = body;
-
+        
         if (!orderId || !slug) {
             return Response.json(
                 { success: false, message: "orderId and slug are required" },
