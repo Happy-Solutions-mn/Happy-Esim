@@ -1,3 +1,6 @@
+npx wrangler d1 execute esim --local --command="CREATE TABLE IF NOT EXISTS qpay_tokens ( id INTEGER PRIMARY KEY AUTOINCREMENT, access_token TEXT NOT NULL, expires_in INTEGER NOT NULL, refresh_token TEXT NOT NULL, refresh_expires_at INTEGER NOT NULL, updated_at INTEGER NOT NULL );"
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

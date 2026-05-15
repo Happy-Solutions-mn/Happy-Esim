@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const { orderId, slug } = body;
+        console.log(orderId, slug);
         
         if (!orderId || !slug) {
             return Response.json(
